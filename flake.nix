@@ -35,6 +35,7 @@
         homebrew = {
           enable = true;
           casks = [
+            "microsoft-teams"
             "android-file-transfer"
             "makemkv"
             "alfred"
