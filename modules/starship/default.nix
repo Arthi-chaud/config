@@ -1,9 +1,28 @@
-{ config, impurity, ... }:
+{
+  config,
+  impurity,
+  isServer,
+  hostname,
+  lib,
+  ...
+}:
 
 {
-  # TODO Migrate server's prompt as well
   programs.starship = {
     enable = true;
   };
-  home.file."${config.xdg.configHome}/starship.toml".source = impurity.link ./starship.toml;
+  home.file."${config.xdg.configHome}/starship.toml".source =
+    if (!isServer) then
+      impurity.link ./starship.toml
+    # TODO Test
+    else
+      lib.mkMerge [
+        ./starship.toml
+        ''
+          [hostname]
+          ssh_only = false
+          ssh_symbol = ""
+          format = '[\[${hostname}}\]]($style) '
+        ''
+      ];
 }
