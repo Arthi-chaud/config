@@ -93,6 +93,10 @@
             htop
             pinentry-tty
           ];
+          fonts.packages = with pkgs; [
+            nerd-fonts.hack
+            nerd-fonts.fira-code
+          ];
           programs.gnupg.agent = {
             enable = true;
           };
