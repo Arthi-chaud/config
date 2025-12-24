@@ -19,6 +19,11 @@
       mkSystem = import ./lib/mkSystem.nix inputs;
     in
     {
+      nixosConfigurations.nestor = mkSystem "nestor" {
+        username = "arthichaud";
+        system = "x86_64-linux";
+        additionalModules = [];
+      };
       darwinConfigurations.macbook = mkSystem "macbook" {
         username = "arthur";
         system = "aarch64-darwin";

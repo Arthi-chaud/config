@@ -3,9 +3,9 @@ inputs@{
   nixpkgs,
   ...
 }:
-hostname:
+profileName:
 {
-  profileName ? hostname,
+  hostname ? profileName,
   username,
   system,
   isServer ? false,
@@ -23,6 +23,7 @@ let
   specialArgs = {
     inherit
       profileName
+      hostname
       username
       isDarwin
       isServer
@@ -40,9 +41,10 @@ in
     (
       { pkgs, ... }:
       {
-        users.users.arthur = {
+        users.users.${username} = {
           home = homeDir;
           shell = pkgs.zsh;
+          isNormalUser = true;
         };
         environment.systemPackages =
           with pkgs;
@@ -70,7 +72,7 @@ in
     )
     homeManager.home-manager
     (
-      { impurity, ... }:
+      { lib, impurity, ... }:
       {
         home-manager = {
           extraSpecialArgs = specialArgs // {
@@ -79,11 +81,11 @@ in
           };
           useGlobalPkgs = true;
           useUserPackages = true;
-          users.${username} = {
-            home.homeDirectory = homeDir;
-            home.username = username;
-            home.stateVersion = "25.11";
+		  home.homeDirectory = lib.mkForce homeDir;
+	      home.username = username;
+		  home.stateVersion = "25.11";
 
+          users.${username} = {
             imports = [
               ../modules/nvim
               ../modules/zsh
