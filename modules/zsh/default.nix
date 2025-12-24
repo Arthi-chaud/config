@@ -1,4 +1,10 @@
-{ config, secrets, ... }:
+{
+  config,
+  secrets,
+  isDarwin,
+  profileName,
+  ...
+}:
 let
   zshDir = "${config.xdg.configHome}/zsh";
 in
@@ -52,7 +58,12 @@ in
       "ssh-nestor" = "ssh ${secrets.sshNestor}";
       "ffj" = "ffprobe -v quiet -print_format json -show_format -show_streams";
 
-      "rb" = "sudo IMPURITY_PATH=\"$(pwd)\" darwin-rebuild switch --impure --flake .#macbook"; # TODO hardcoded user
+      "rb" =
+        if isDarwin then
+          "sudo IMPURITY_PATH=\"$(pwd)\" darwin-rebuild switch --impure --flake .#${profileName}"
+        else
+          "sudo IMPURITY_PATH=\"$(pwd)\" nixos-rebuild switch --impure --flake .#${profileName}";
+
       "cs" = "sudo nix-collect-garbage -d";
 
       "bi" = "brew install";

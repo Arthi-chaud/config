@@ -5,6 +5,7 @@ inputs@{
 }:
 hostname:
 {
+  profileName ? hostname,
   username,
   system,
   isServer ? false,
@@ -20,10 +21,13 @@ let
     if isDarwin then inputs.home-manager.darwinModules else inputs.home-manager.nixosModules;
   homeDir = if isDarwin then "/Users/${username}" else "/home/${username}";
   specialArgs = {
-    inherit username;
-    inherit isDarwin;
-    inherit isServer;
-    inherit system;
+    inherit
+      profileName
+      username
+      isDarwin
+      isServer
+      system
+      ;
   };
 in
 (newSystemFunc {
