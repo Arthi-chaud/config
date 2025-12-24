@@ -62,7 +62,7 @@ in
         if isDarwin then
           "sudo IMPURITY_PATH=\"$(pwd)\" darwin-rebuild switch --impure --flake .#${profileName}"
         else
-          "sudo IMPURITY_PATH=\"$(pwd)\" nixos-rebuild switch --impure --flake .#${profileName}";
+          "IMPURITY_PATH=\"$(pwd)\" nix run  nixpkgs#nixos-rebuild --extra-experimental-features 'nix-command flakes' -- switch --flake .#${profileName} --impure"; # TODO hardcoded user
 
       "cs" = "sudo nix-collect-garbage -d";
 
