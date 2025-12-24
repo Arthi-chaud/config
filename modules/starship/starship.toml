@@ -1,0 +1,105 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+palette = "catppuccin_latte"
+
+add_newline = false
+
+format = """
+$hostname\
+$directory\
+$git_branch\
+$all\
+$cmd_duration\
+$jobs\
+$battery\
+$line_break\
+$shell\
+$character"""
+
+[hostname]
+ssh_only = true
+ssh_symbol = "" # TODO Add Hostname
+format = '[\[$symbol\]]($style) '
+
+[fill]
+symbol = ' '
+
+[git_branch]
+symbol = ' '
+format = '[\[$symbol$branch\]]($style) '
+
+[git_status]
+disabled = true
+
+[directory]
+style = "bold lavender"
+
+[c]
+symbol = " "
+[golang]
+symbol = " "
+format = '[$symbol]($style)'
+
+[gradle]
+symbol = " "
+format = '[$symbol]($style) '
+[haskell]
+symbol = " "
+format = '[$symbol]($style) '
+style = 'bold lavender'
+[java]
+symbol = " "
+format = '[$symbol]($style) '
+style = 'bold red' # TODO
+[kotlin]
+symbol = " "
+format = '[$symbol]($style) '
+[lua]
+symbol = " "
+[nix_shell]
+symbol = ' '
+format = '[$symbol]($style) '
+[nodejs]
+symbol = " "
+format = '[$symbol]($style) '
+[python]
+symbol = " "
+format = '[$symbol]($style) '
+[rust]
+symbol = "󱘗 "
+[swift]
+symbol = " "
+format = '[$symbol]($style) '
+[docker_context]
+symbol = " "
+format = '[$symbol]($style) '
+
+
+# copied from https://github.com/catppuccin/starship/blob/main/themes/latte.toml
+[palettes.catppuccin_latte]
+rosewater = "#dc8a78"
+flamingo = "#dd7878"
+pink = "#ea76cb"
+mauve = "#8839ef"
+red = "#d20f39"
+maroon = "#e64553"
+peach = "#fe640b"
+yellow = "#df8e1d"
+green = "#40a02b"
+teal = "#179299"
+sky = "#04a5e5"
+sapphire = "#209fb5"
+blue = "#1e66f5"
+lavender = "#7287fd"
+text = "#4c4f69"
+subtext1 = "#5c5f77"
+subtext0 = "#6c6f85"
+overlay2 = "#7c7f93"
+overlay1 = "#8c8fa1"
+overlay0 = "#9ca0b0"
+surface2 = "#acb0be"
+surface1 = "#bcc0cc"
+surface0 = "#ccd0da"
+base = "#eff1f5"
+mantle = "#e6e9ef"
+crust = "#dce0e8"
