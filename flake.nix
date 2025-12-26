@@ -14,16 +14,26 @@
   };
 
   outputs =
-    { ... }@inputs:
+    { nixpkgs, ... }@inputs:
     let
       mkSystem = import ./lib/mkSystem.nix inputs;
     in
     {
-      nixosConfigurations.nestor = mkSystem "nestor" {
-        username = "arthichaud";
-        system = "x86_64-linux";
-        additionalModules = [];
-      };
+    
+      homeConfigurations.arthichaud = inputs.home-manager.lib.homeManagerConfiguration {
+            pkgs = nixpkgs.legacyPackages.x86_64-linux;
+	    extraSpecialArgs = { isDarwin = false; profileName = "nestor"; };
+	    modules = [ ./modules/media ./modules/dev {
+	    home = {
+          username = "arthichaud";
+          homeDirectory = "/home/arthichaud";
+        };
+            home.stateVersion = "25.11";
+
+	    } ];
+
+
+    	};
       darwinConfigurations.macbook = mkSystem "macbook" {
         username = "arthur";
         system = "aarch64-darwin";
