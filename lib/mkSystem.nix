@@ -44,7 +44,6 @@ in
         users.users.${username} = {
           home = homeDir;
           shell = pkgs.zsh;
-          isNormalUser = true;
         };
         environment.systemPackages =
           with pkgs;
@@ -72,7 +71,7 @@ in
     )
     homeManager.home-manager
     (
-      { lib, impurity, ... }:
+      { impurity, ... }:
       {
         home-manager = {
           extraSpecialArgs = specialArgs // {
@@ -81,9 +80,6 @@ in
           };
           useGlobalPkgs = true;
           useUserPackages = true;
-		  home.homeDirectory = lib.mkForce homeDir;
-	      home.username = username;
-		  home.stateVersion = "25.11";
 
           users.${username} = {
             imports = [
@@ -99,6 +95,7 @@ in
               ../modules/kitty
             ]
             ++ additionalHome;
+            home.stateVersion = "25.11";
           };
         };
       }
