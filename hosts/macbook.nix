@@ -69,15 +69,15 @@ in
                 ../modules/git
                 ../modules/sketchybar
                 ../modules/skhd
-                ../modules/yabai/home.nix
                 ../modules/gui
                 ../modules/kitty
+                (import ../modules/yabai { home = true; })
               ];
             };
           };
         }
       )
-      ../modules/yabai
+      (import ../modules/yabai { home = false; })
       {
         # Darwin
         system.defaults = {
