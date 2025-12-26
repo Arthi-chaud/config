@@ -12,5 +12,5 @@
       atomicparsley
       yt-dlp
     ]
-    ++ lib.optional (!isDarwin) [ makemkv ];
+    ++ lib.optionals (!isDarwin) [ makemkv ];
 }

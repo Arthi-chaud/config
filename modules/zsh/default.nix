@@ -2,7 +2,10 @@
   config,
   secrets,
   isDarwin,
+  isServer,
+  lib,
   profileName,
+  useStandaloneHM,
   ...
 }:
 let
@@ -29,7 +32,8 @@ in
       DISABLE_MAGIC_FUNCTIONS = "true";
       DISABLE_COMPFIX = "true";
       ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE = "20";
-    };
+    }
+    // lib.optionalAttrs isServer { TERM = "xterm-256color"; };
     oh-my-zsh = {
       enable = true;
       plugins = [
@@ -61,8 +65,10 @@ in
       "rb" =
         if isDarwin then
           "sudo IMPURITY_PATH=\"$(pwd)\" darwin-rebuild switch --impure --flake .#${profileName}"
+        else if useStandaloneHM then
+          "IMPURITY_PATH=\"$(pwd)\" nix run home-manager/master -- switch --flake .#${profileName} --impure"
         else
-          "IMPURITY_PATH=\"$(pwd)\" nix run  nixpkgs#nixos-rebuild --extra-experimental-features 'nix-command flakes' -- switch --flake .#${profileName} --impure"; # TODO hardcoded user
+          throw "Don't know what the 'rb' alias should look like";
 
       "cs" = "sudo nix-collect-garbage -d";
 

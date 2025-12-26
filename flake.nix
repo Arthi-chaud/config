@@ -17,29 +17,7 @@
     inputs:
     let
       macbook = (import ./hosts/macbook.nix) inputs;
+      nestor = (import ./hosts/nestor.nix) inputs;
     in
-    macbook // { };
-
-  # {
-
-  # homeConfigurations.arthichaud = inputs.home-manager.lib.homeManagerConfiguration {
-  #   pkgs = nixpkgs.legacyPackages.x86_64-linux;
-  #   extraSpecialArgs = {
-  #     isDarwin = false;
-  #     profileName = "nestor";
-  #   };
-  #   modules = [
-  #     ./modules/media
-  #     ./modules/dev
-  #     {
-  #       home = {
-  #         username = "arthichaud";
-  #         homeDirectory = "/home/arthichaud";
-  #       };
-  #       home.stateVersion = "25.11";
-  #     }
-  #   ];
-  #
-  # };
-
+    macbook // nestor;
 }

@@ -12,6 +12,7 @@ let
   isDarwin = true;
   profileName = "macbook";
   isServer = false;
+  useStandaloneHM = false;
   specialArgs = {
     inherit
       username
@@ -19,6 +20,7 @@ let
       isDarwin
       isServer
       profileName
+      useStandaloneHM
       ;
   };
 in

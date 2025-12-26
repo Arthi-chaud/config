@@ -18,6 +18,12 @@ $line_break\
 $shell\
 $character"""
 
+[hostname]
+format = '[\[$hostname\]]($style) '
+style = 'bold green'
+[username]
+disabled = true
+
 [git_branch]
 symbol = ' '
 format = '[\[$symbol$branch\]]($style) '
