@@ -138,7 +138,10 @@ in
       [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
     '';
   };
-
+  home.sessionPath = [
+    "$HOME/.ghcup/bin"
+    "$HOME/.cabal/bin"
+  ];
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;

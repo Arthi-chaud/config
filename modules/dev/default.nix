@@ -9,14 +9,9 @@
   home.packages =
     with pkgs;
     [
-      # Haskell
-      haskell.compiler.ghc912
-      (haskell-language-server.override { supportedGhcVersions = [ "912" ]; })
-      haskellPackages.hlint
-      haskellPackages.fourmolu
-      haskellPackages.stack
-
-      gcc
+      # TODO Haskell
+      zlib
+      pkg-config
       bun
       python313
 
