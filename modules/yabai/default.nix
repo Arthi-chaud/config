@@ -46,7 +46,7 @@ else
         yabai -m signal --add event="$event" action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse"
         done
 
-        yabai -m config window_shadow off
+        sleep 5 ; yabai -m config window_shadow off
       '';
     };
 
