@@ -1,7 +1,11 @@
-{ ... }:
+{ pkgs, isDarwin, ... }:
 {
   config = {
     programs.gpg.enable = true;
+    services.gpg-agent = {
+      enable = true;
+      pinentry.package = if isDarwin then pkgs.pinentry_mac else pkgs.pinentry-all;
+    };
     programs.git = {
       enable = true;
       ignores = [
