@@ -4,7 +4,7 @@ let
 in
 {
 
-  home.file."${skhdDir}/open-safari.scpt".source = impurity.link ./open-safari.scpt;
+  home.file."${skhdDir}/open-browser.scpt".source = impurity.link ./open-browser.scpt;
   home.file."${skhdDir}/clear-notifications.scpt".source = impurity.link ./clear-notifications.scpt;
   home.file."${skhdDir}/move-window.sh".source = impurity.link ./move-window.sh;
 
@@ -13,7 +13,7 @@ in
     config = ''
       alt - return : open -na $(which kitty) --args --single-instance --instance-group kk -d ~
 
-      alt - 0x0A : osascript ${skhdDir}/open-safari.scpt
+      alt - 0x0A : osascript ${skhdDir}/open-browser.scpt
 
       cmd - l : osascript ${skhdDir}/clear-notifications.scpt ; 
 
@@ -29,6 +29,7 @@ in
       	"Discord": yabai -m window --close
       	"code": yabai -m window --close
       	"safari": yabai -m window --close
+      	"Firefox": yabai -m window --close
       	"Microsoft Teams (work or school)": yabai -m window --close
       	* ~
       ]

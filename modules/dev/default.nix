@@ -17,6 +17,7 @@
 
       docker
       docker-compose
+      docker-buildx
 
       yaml-language-server
 

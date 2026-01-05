@@ -8,5 +8,6 @@
     qbittorrent
     zotero
     google-chrome
+    firefox
   ];
 }

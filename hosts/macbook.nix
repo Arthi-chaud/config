@@ -85,7 +85,7 @@ in
             orientation = "bottom";
             persistent-apps = [
               { app = "/System/Applications/Launchpad.app"; }
-              { app = "/Applications/Safari.app"; }
+              { app = "/Users/${username}/Applications/Home Manager Apps/Firefox.app"; }
             ];
             show-recents = false;
             autohide = true;
