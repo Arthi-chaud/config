@@ -1,5 +1,11 @@
-{ config, impurity, ... }:
+{
+  config,
+  impurity,
+  pkgs,
+  ...
+}:
 let
+  uid = toString 501;
   skhdDir = "${config.xdg.configHome}/skhd";
 in
 {
@@ -13,11 +19,10 @@ in
     config = ''
       alt - return : open -na $(which kitty) --args --single-instance --instance-group kk -d ~
 
-      alt - 0x0A : osascript ${skhdDir}/open-browser.scpt
-
+      alt - 0x0A : ${pkgs.firefox}/Applications/Firefox.app/Contents/MacOS/firefox       
       cmd - l : osascript ${skhdDir}/clear-notifications.scpt ; 
 
-      alt - r : skhd --reload ; yabai --restart-service ; sketchybar --reload
+      alt - r : launchctl kickstart -k gui/${uid}/org.nixos.yabai & ; launchctl kickstart -k gui/${uid}/org.nix-community.home.skhd & ; sketchybar --reload
 
       alt - f : yabai -m window --toggle native-fullscreen
 

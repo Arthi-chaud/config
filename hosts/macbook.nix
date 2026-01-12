@@ -78,24 +78,27 @@ in
         }
       )
       (import ../modules/yabai { home = false; })
-      {
-        # Darwin
-        system.defaults = {
-          dock = {
-            orientation = "bottom";
-            persistent-apps = [
-              { app = "/System/Applications/Launchpad.app"; }
-              { app = "/Users/${username}/Applications/Home Manager Apps/Firefox.app"; }
-            ];
-            show-recents = false;
-            autohide = true;
+      (
+        { pkgs, ... }:
+        {
+          # Darwin
+          system.defaults = {
+            dock = {
+              orientation = "bottom";
+              persistent-apps = [
+                { app = "/System/Applications/Launchpad.app"; }
+                { app = "${pkgs.firefox}/Applications/Firefox.app"; }
+              ];
+              show-recents = false;
+              autohide = true;
+            };
+            NSGlobalDomain = {
+              AppleInterfaceStyleSwitchesAutomatically = true;
+              AppleInterfaceStyle = null; # i.e. not Dark
+            };
           };
-          NSGlobalDomain = {
-            AppleInterfaceStyleSwitchesAutomatically = true;
-            AppleInterfaceStyle = null; # i.e. not Dark
-          };
-        };
-      }
+        }
+      )
       nix-homebrew.darwinModules.nix-homebrew
       {
         # Homebrew
