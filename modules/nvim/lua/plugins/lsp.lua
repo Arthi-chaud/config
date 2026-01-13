@@ -13,6 +13,9 @@ local function hover()
 
 	-- Get hover info
 	local clients = vim.lsp.get_clients({ bufnr = bufnr })
+	if clients == nil or #clients == 0 then
+		return
+	end
 	vim.lsp.buf_request(
 		0,
 		"textDocument/hover",
@@ -20,7 +23,7 @@ local function hover()
 		function(_, result, _, _)
 			if not (result and result.contents) then
 				if diag_msg ~= "" then
-					vim.diagnostic.open_float(0, { scope = "cursor" })
+					vim.diagnostic.open_float(nil, { scope = "cursor" })
 				end
 				return
 			end
