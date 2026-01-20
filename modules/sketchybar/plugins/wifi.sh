@@ -9,7 +9,7 @@
 sketchybar --set $NAME label="Loading..." icon=􀤆
 INFO="$(system_profiler SPAirPortDataType | awk '/Current Network/ {getline;$1=$1;print $0 | "tr -d ':'";exit}')"
 
-INTERFACE="$( route get default 2>&1 | grep interface | awk '{print $2}')"
+INTERFACE="$(route get default 2>&1 | grep interface | awk '{print $2}')"
 INTERFACE=${INTERFACE:-"x"}
 HARDWARE_TYPE="$(networksetup -listnetworkserviceorder | grep -B 1 "Device: $INTERFACE" | head -n 1 | awk '{print $2}')"
 
@@ -30,7 +30,7 @@ if [[ "$LABEL" == "$NOT_CONNECTED" ]]; then
 	ICON=􀙈
 fi
 
-if [[ $HARDWARE_TYPE == "USB" ]]; then 
+if [[ $HARDWARE_TYPE == "USB" || $HARDWARE_TYPE == "AX88179B" ]]; then 
 	LABEL="Ethernet"
 	ICON=􀺦
 fi
