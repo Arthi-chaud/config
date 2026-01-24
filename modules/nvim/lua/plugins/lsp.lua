@@ -58,36 +58,36 @@ local function hover()
 		end
 	)
 end
+
+local function run_codelens()
+	local bufnr = vim.api.nvim_get_current_buf()
+	local lenses = vim.lsp.codelens.get(bufnr)
+
+	if not lenses or #lenses == 0 then
+		vim.notify("No code lenses available", vim.log.levels.INFO)
+		return
+	end
+	vim.lsp.codelens.run() -- NOTE: Cannot run just one lens, has to be all of then on the current line
+end
+
 local lsp_keymaps = function()
 	local function set(mode, binding, action, desc)
 		vim.keymap.set(mode, binding, action, { noremap = true, desc = desc })
 	end
 	set("n", "<leader>ca", vim.lsp.buf.code_action, "Show Code actions")
+	set("n", "<leader>cl", run_codelens, "Show Code lenses")
 	set("n", "<leader>li", "<cmd>LspInfo<CR>", "Open LSP Info")
 	set("n", "<leader>i", hover, "Get var/type info")
 	set("n", "<leader>gR", "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename symbol")
 	set("n", "<leader>gd", "<cmd>lua vim.lsp.buf.definition()<CR>", "Go to definition")
 	set("n", "<leader>gI", "<cmd>lua vim.lsp.buf.implementation()<CR>", "Go to implementation")
-	set("n", "[g", vim.diagnostic.goto_prev, "Jump to previous Diagnostic")
-	set("n", "]g", vim.diagnostic.goto_next, "Jump to next Diagnostic")
+	set("n", "[g", function()
+		vim.diagnostic.jump({ count = -1, float = true })
+	end, "Jump to previous Diagnostic")
+	set("n", "]g", function()
+		vim.diagnostic.jump({ count = 1, float = true })
+	end, "Jump to next Diagnostic")
 end
-
--- local setup_lambdananas = function()
--- 	local lspconfig = require("lspconfig")
--- 	local configs = require("lspconfig.configs")
---
--- 	if not configs.lambdananas then
--- 		configs.lambdananas = {
--- 			default_config = {
--- 				cmd = { "lambdananas-language-server", "." },
--- 				filetypes = { "haskell", "lhaskell" },
--- 				root_dir = lspconfig.util.root_pattern("hie.yaml", "stack.yaml", "*.cabal", "package.yaml"),
--- 				single_file_support = true,
--- 			},
--- 		}
--- 	end
--- 	lspconfig.lambdananas.setup({})
--- end
 
 return {
 	{
@@ -105,6 +105,12 @@ return {
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		opts = function()
 			lsp_keymaps()
+			vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "BufWritePost", "BufNewFile", "LspAttach" }, {
+				callback = function()
+					local bufnr = vim.api.nvim_get_current_buf()
+					vim.lsp.codelens.refresh({ bufnr = bufnr })
+				end,
+			})
 			-- local lspconfig = require("lspconfig")
 			-- local configs = require("lspconfig.configs")
 			--
@@ -210,3 +216,20 @@ return {
 		},
 	},
 }
+
+-- local setup_lambdananas = function()
+-- 	local lspconfig = require("lspconfig")
+-- 	local configs = require("lspconfig.configs")
+--
+-- 	if not configs.lambdananas then
+-- 		configs.lambdananas = {
+-- 			default_config = {
+-- 				cmd = { "lambdananas-language-server", "." },
+-- 				filetypes = { "haskell", "lhaskell" },
+-- 				root_dir = lspconfig.util.root_pattern("hie.yaml", "stack.yaml", "*.cabal", "package.yaml"),
+-- 				single_file_support = true,
+-- 			},
+-- 		}
+-- 	end
+-- 	lspconfig.lambdananas.setup({})
+-- end
