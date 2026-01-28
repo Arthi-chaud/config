@@ -25,7 +25,7 @@ in
       DEVELOPER_DIR = ""; # https://github.com/NixOS/nixpkgs/issues/376958
       # TODO Remove me
       ANDROID_HOME = "$HOME/Library/Android/sdk";
-      PATH = "$PATH:$(yarn global bin 2> /dev/null):$HOME/.local/bin/:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools:/nix/var/nix/profiles/default/bin";
+      PATH = "$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools:$HOME/.local/bin/:/nix/var/nix/profiles/default/bin";
 
       # NOTE: Oh My Zsh-specific, can help speeding up at start
       DISABLE_AUTO_UPDATE = "true";
