@@ -9,7 +9,12 @@
   home.packages =
     with pkgs;
     [
-      # TODO Haskell
+      haskell.compiler.ghc98
+      haskellPackages.cabal-install
+      fourmolu
+      hlint
+      (haskell-language-server.override { supportedGhcVersions = [ "98" ]; })
+
       zlib
       pkg-config
       bun
@@ -20,6 +25,9 @@
       docker-buildx
 
       yaml-language-server
+
+      # Java (for android dev)
+      zulu17
 
       # Nix
       nixfmt
