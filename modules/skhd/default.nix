@@ -20,6 +20,7 @@ in
       alt - return : open -na $(which kitty) --args --single-instance --instance-group kk -d ~
 
       alt - 0x0A : ${pkgs.firefox}/Applications/Firefox.app/Contents/MacOS/firefox       
+      alt - 0x32 : ${pkgs.firefox}/Applications/Firefox.app/Contents/MacOS/firefox       
       cmd - l : osascript ${skhdDir}/clear-notifications.scpt ; 
 
       alt - r : launchctl kickstart -k gui/${uid}/org.nixos.yabai & ; launchctl kickstart -k gui/${uid}/org.nix-community.home.skhd & ; sketchybar --reload
