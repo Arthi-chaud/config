@@ -28,7 +28,7 @@ else
         left_padding = padding;
         right_padding = padding;
         # NOTE: does not work, had to set it up manually
-        # window_shadow = "off";
+        window_shadow = "off";
       };
       # TODO nixify 'clear-empty-spaces' script
       extraConfig = ''
