@@ -7,7 +7,7 @@
 # https://stackoverflow.com/questions/78994709/how-to-get-the-current-wi-fi-ssid-in-swift-on-macos
 
 sketchybar --set $NAME label="Loading..." icon=􀤆
-INFO="$(system_profiler SPAirPortDataType | awk '/Current Network/ {getline;$1=$1;print $0 | "tr -d ':'";exit}')"
+INFO="$(en="$(networksetup -listallhardwareports | awk '/Wi-Fi|AirPort/{getline; print $NF}')"; ipconfig getsummary "$en" | grep -Fxq "  Active : FALSE" || networksetup -listpreferredwirelessnetworks "$en" | sed -n '2s/^\t//p')"
 
 INTERFACE="$(route get default 2>&1 | grep interface | awk '{print $2}')"
 INTERFACE=${INTERFACE:-"x"}
