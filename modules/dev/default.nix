@@ -45,6 +45,9 @@
           import
           ;
       })
+
+      tree-sitter
+      ripgrep
     ]
     ++ lib.optionals isDarwin [ colima ];
 }
