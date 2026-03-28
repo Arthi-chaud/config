@@ -95,8 +95,10 @@ in
             NSGlobalDomain = {
               AppleInterfaceStyleSwitchesAutomatically = true;
               AppleInterfaceStyle = null; # i.e. not Dark
+              _HIHideMenuBar = true; # TODO Doesn't work
             };
           };
+          system.startup.chime = false;
         }
       )
       nix-homebrew.darwinModules.nix-homebrew
