@@ -6,6 +6,21 @@ return {
 		opts = {},
 		lazy = false,
 	},
+	{
+		"folke/todo-comments.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		opts = {
+			signs = false,
+			keywords = {
+				TODO = { color = "error" },
+				WARN = { color = "warning" },
+			},
+			highlight = {
+				keyword = "bg",
+			},
+			pattern = [[(KEYWORDS)]],
+		},
+	},
 	-- Show indentations
 	{
 		"lukas-reineke/indent-blankline.nvim",

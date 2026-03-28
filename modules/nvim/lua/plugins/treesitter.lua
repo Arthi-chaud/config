@@ -20,6 +20,7 @@ return {
 		opts = function()
 			return {
 				flavour = "latte",
+				auto_integrations = true,
 				integrations = {
 					telescope = {
 						enabled = true,
@@ -32,6 +33,10 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
+		-- NOTE: nix pkgs has tree-sitter-cli 0.25.
+		-- But the edge branch needs 0.26.
+		-- So we pin to the archived 'master' branch with accepts 0.25
+		branch = "master",
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter-textobjects",
 		},
@@ -40,6 +45,7 @@ return {
 			ensure_installed = {
 				"c",
 				"haskell",
+				"tsx",
 				"typescript",
 				"python",
 				"go",
@@ -133,7 +139,7 @@ return {
 					},
 				},
 			})
-			local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
+			local ts_repeat_move = require("nvim-treesitter-textobjects.repeatable_move")
 
 			-- Repeat movement with ; and ,
 			vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move_next)
