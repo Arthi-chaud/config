@@ -124,7 +124,11 @@ in
       common.nixSettings
       # TODO add nixGc when got rid of determinate
       {
-        nix.enable = !isDarwin; # TODO Installed nix using determinate on macos
+        nix.enable = true;
+        nix.gc = {
+          automatic = true;
+          options = "--delete-older-than 15d";
+        };
 
         nixpkgs.hostPlatform = system;
         nixpkgs.config.allowUnfree = true;
