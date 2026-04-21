@@ -1,4 +1,4 @@
-ignored_dirs = { "spegion" }
+local ignored_dirs = {}
 
 return {
 	{
@@ -16,6 +16,7 @@ return {
 			end,
 			formatters_by_ft = {
 				haskell = { "fourmolu" },
+				bib = { "bibtex-tidy" },
 				python = { "ruff_format" },
 				lua = { "stylua" },
 				c = { "clang-format" },
