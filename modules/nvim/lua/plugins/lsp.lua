@@ -59,15 +59,41 @@ local function hover()
 	)
 end
 
-local function run_codelens()
-	local bufnr = vim.api.nvim_get_current_buf()
-	local lenses = vim.lsp.codelens.get(bufnr)
+local expand_macro = function()
+	vim.lsp.buf_request_all(0, "rust-analyzer/expandMacro", vim.lsp.util.make_position_params(), function(result)
+		-- Create a new tab
+		vim.cmd("vsplit")
 
-	if not lenses or #lenses == 0 then
-		vim.notify("No code lenses available", vim.log.levels.INFO)
-		return
-	end
-	vim.lsp.codelens.run() -- NOTE: Cannot run just one lens, has to be all of then on the current line
+		-- Create an empty scratch buffer (non-listed, non-file i.e scratch)
+		-- :help nvim_create_buf
+		local buf = vim.api.nvim_create_buf(false, true)
+
+		-- and set it to the current window
+		-- :help nvim_win_set_buf
+		vim.api.nvim_win_set_buf(0, buf)
+
+		if result then
+			-- set the filetype to rust so that rust's syntax highlighting works
+			-- :help nvim_set_option_value
+			vim.api.nvim_set_option_value("filetype", "rust", { buf = 0 })
+
+			-- Insert the result into the new buffer
+			for client_id, res in pairs(result) do
+				if res and res.result and res.result.expansion then
+					-- :help nvim_buf_set_lines
+					vim.api.nvim_buf_set_lines(buf, -1, -1, false, vim.split(res.result.expansion, "\n"))
+				else
+					vim.api.nvim_buf_set_lines(buf, -1, -1, false, {
+						"No expansion available.",
+					})
+				end
+			end
+		else
+			vim.api.nvim_buf_set_lines(buf, -1, -1, false, {
+				"Error: No result returned.",
+			})
+		end
+	end)
 end
 
 local lsp_keymaps = function()
@@ -75,7 +101,8 @@ local lsp_keymaps = function()
 		vim.keymap.set(mode, binding, action, { noremap = true, desc = desc })
 	end
 	set("n", "<leader>ca", vim.lsp.buf.code_action, "Show Code actions")
-	set("n", "<leader>cl", run_codelens, "Show Code lenses")
+	set("n", "<leader>cl", vim.lsp.codelens.run, "Show Code lenses")
+	set("n", "<leader>me", expand_macro, "Expand Macro")
 	set("n", "<leader>li", "<cmd>LspInfo<CR>", "Open LSP Info")
 	set("n", "<leader>i", hover, "Get var/type info")
 	set("n", "<leader>gR", "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename symbol")
@@ -111,7 +138,22 @@ return {
 					vim.lsp.codelens.refresh({ bufnr = bufnr })
 				end,
 			})
-			-- local lspconfig = require("lspconfig")
+			vim.lsp.config("rust_analyzer", {
+				capabilities = capabilities,
+				commands = {
+					ExpandMacro = {
+						expand_macro,
+						-- function()
+						-- 	vim.lsp.buf_request_all(
+						-- 		0,
+						-- 		"rust-analyzer/expandMacro",
+						-- 		vim.lsp.util.make_position_params(0, "utf-8"),
+						-- 		vim.print
+						-- 	)
+						-- end,
+					},
+				},
+			})
 			-- local configs = require("lspconfig.configs")
 			--
 			-- configs.agda_ls = {
@@ -143,7 +185,7 @@ return {
 					typescriptreact = { "ts_ls", "biome" },
 					markdown = { "ltex" },
 					latex = { "ltex" },
-					python = { "ruff_lsp", "pyright" },
+					python = { "pyright", "ruff_lsp" },
 				},
 				configs = {
 					rust_analyzer = {
@@ -232,4 +274,15 @@ return {
 -- 		}
 -- 	end
 -- 	lspconfig.lambdananas.setup({})
+-- end
+--
+-- local function run_codelens()
+-- 	local bufnr = vim.api.nvim_get_current_buf()
+-- 	local lenses = vim.lsp.codelens.get(bufnr)
+--
+-- 	if not lenses or #lenses == 0 then
+-- 		vim.notify("No code lenses available", vim.log.levels.INFO)
+-- 		return
+-- 	end
+-- 	vim.lsp.codelens.run() -- NOTE: Cannot run just one lens, has to be all of then on the current line
 -- end
