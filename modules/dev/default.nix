@@ -48,6 +48,7 @@
 
       tree-sitter
       ripgrep
+      gh
     ]
     ++ lib.optionals isDarwin [ colima ];
 }
