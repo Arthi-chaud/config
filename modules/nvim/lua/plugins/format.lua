@@ -20,6 +20,7 @@ return {
 				python = { "ruff_format" },
 				lua = { "stylua" },
 				c = { "clang-format" },
+				make = { "bake" },
 				sql = { "pg_format" },
 				typescript = { "biome-check" },
 				typescriptreact = { "biome-check" },
