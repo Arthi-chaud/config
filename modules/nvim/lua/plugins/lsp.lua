@@ -143,14 +143,6 @@ return {
 				commands = {
 					ExpandMacro = {
 						expand_macro,
-						-- function()
-						-- 	vim.lsp.buf_request_all(
-						-- 		0,
-						-- 		"rust-analyzer/expandMacro",
-						-- 		vim.lsp.util.make_position_params(0, "utf-8"),
-						-- 		vim.print
-						-- 	)
-						-- end,
 					},
 				},
 			})
@@ -201,6 +193,9 @@ return {
 								formattingProvider = "fourmolu",
 								plugin = {
 									hlint = {
+										globalOn = true,
+									},
+									splice = {
 										globalOn = true,
 									},
 								},
@@ -274,15 +269,4 @@ return {
 -- 		}
 -- 	end
 -- 	lspconfig.lambdananas.setup({})
--- end
---
--- local function run_codelens()
--- 	local bufnr = vim.api.nvim_get_current_buf()
--- 	local lenses = vim.lsp.codelens.get(bufnr)
---
--- 	if not lenses or #lenses == 0 then
--- 		vim.notify("No code lenses available", vim.log.levels.INFO)
--- 		return
--- 	end
--- 	vim.lsp.codelens.run() -- NOTE: Cannot run just one lens, has to be all of then on the current line
 -- end
