@@ -33,37 +33,23 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
-		-- NOTE: nix pkgs has tree-sitter-cli 0.25.
-		-- But the edge branch needs 0.26.
-		-- So we pin to the archived 'master' branch with accepts 0.25
-		branch = "master",
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter-textobjects",
 		},
-		main = "nvim-treesitter.configs",
-		opts = {
-			ensure_installed = {
-				"c",
-				"haskell",
-				"tsx",
-				"typescript",
-				"python",
-				"go",
-				"rust",
-				"yaml",
-				"json",
-				"lua",
-				"markdown",
-			},
-			sync_install = false,
-			highlight = { enable = true },
-			indent = { enable = true },
-		},
+		init = function()
+			-- SRC: https://www.qu8n.com/posts/treesitter-migration-guide-for-nvim-0-12
+			vim.api.nvim_create_autocmd("FileType", {
+				callback = function()
+					pcall(vim.treesitter.start)
+					vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+				end,
+			})
+		end,
 	},
 	{
 		"nvim-treesitter/nvim-treesitter-textobjects",
 		config = function()
-			require("nvim-treesitter.configs").setup({
+			require("nvim-treesitter-textobjects").setup({
 				textobjects = {
 					select = {
 						enable = true,

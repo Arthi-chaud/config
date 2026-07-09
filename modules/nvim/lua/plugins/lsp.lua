@@ -103,7 +103,7 @@ local lsp_keymaps = function()
 	set("n", "<leader>ca", vim.lsp.buf.code_action, "Show Code actions")
 	set("n", "<leader>cl", vim.lsp.codelens.run, "Show Code lenses")
 	set("n", "<leader>me", expand_macro, "Expand Macro")
-	set("n", "<leader>li", "<cmd>LspInfo<CR>", "Open LSP Info")
+	set("n", "<leader>li", "<cmd>checkhealth vim.lsp<CR>", "Open LSP Info")
 	set("n", "<leader>i", hover, "Get var/type info")
 	set("n", "<leader>gR", "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename symbol")
 	set("n", "<leader>gd", "<cmd>lua vim.lsp.buf.definition()<CR>", "Go to definition")
@@ -120,9 +120,11 @@ return {
 	{
 		"folke/lazydev.nvim",
 		ft = "lua",
-		opts = { library = {
-			"lazy.nvim",
-		} },
+		opts = {
+			library = {
+				"lazy.nvim",
+			},
+		},
 	},
 	{
 		"dundalek/lazy-lsp.nvim",
@@ -132,12 +134,7 @@ return {
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		opts = function()
 			lsp_keymaps()
-			vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "BufWritePost", "BufNewFile", "LspAttach" }, {
-				callback = function()
-					local bufnr = vim.api.nvim_get_current_buf()
-					vim.lsp.codelens.refresh({ bufnr = bufnr })
-				end,
-			})
+			vim.lsp.codelens.enable(true)
 			vim.lsp.config("rust_analyzer", {
 				capabilities = capabilities,
 				commands = {
