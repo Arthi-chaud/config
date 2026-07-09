@@ -122,7 +122,6 @@ in
         };
       }
       common.nixSettings
-      # TODO add nixGc when got rid of determinate
       {
         nix.enable = true;
         nix.gc = {

@@ -30,7 +30,6 @@ else
         # NOTE: does not work, had to set it up manually
         window_shadow = "off";
       };
-      # TODO nixify 'clear-empty-spaces' script
       extraConfig = ''
         yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
         sudo yabai --load-sa
