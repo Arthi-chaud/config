@@ -21,7 +21,7 @@ return {
 				lua = { "stylua" },
 				c = { "clang-format" },
 				make = { "bake" },
-				sql = { "pg_format" },
+				sql = { "pg_format", "sleek" },
 				typescript = { "biome-check" },
 				typescriptreact = { "biome-check" },
 				rust = { "rustfmt", lsp_format = "fallback" },
