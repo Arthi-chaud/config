@@ -1,63 +1,4 @@
 -- Hover groups LSP Diagnostic and Hover Info
-local function hover()
-	local bufnr = vim.api.nvim_get_current_buf()
-	local win = vim.api.nvim_get_current_win()
-
-	-- Get diagnostics at cursor
-	local diag = vim.diagnostic.get(bufnr, { lnum = vim.api.nvim_win_get_cursor(0)[1] - 1 })
-	local diag_msg = ""
-	for _, d in ipairs(diag) do
-		-- Split each diagnostic
-		diag_msg = diag_msg .. d.message .. "\n--\n"
-	end
-
-	-- Get hover info
-	local clients = vim.lsp.get_clients({ bufnr = bufnr })
-	if clients == nil or #clients == 0 then
-		return
-	end
-	vim.lsp.buf_request(
-		0,
-		"textDocument/hover",
-		vim.lsp.util.make_position_params(win, clients[1].offset_encoding or "utf-16"),
-		function(_, result, _, _)
-			if not (result and result.contents) then
-				if diag_msg ~= "" then
-					vim.diagnostic.open_float(nil, { scope = "cursor" })
-				end
-				return
-			end
-			local markdown_lines = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
-
-			-- Merge diagnostics + hover
-			if diag_msg ~= "" then
-				table.insert(markdown_lines, 1, "**Diagnostics:**")
-				local line_count = 1
-				for line in diag_msg:gmatch("([^\n]*)\n?") do
-					if line == "--" then
-						table.insert(markdown_lines, line_count + 1, line)
-						line_count = line_count + 1
-					elseif line ~= "" then
-						line = string.gsub(line, "%[", "\\["):gsub("%]", "\\]")
-						table.insert(markdown_lines, line_count + 1, "- " .. line)
-						line_count = line_count + 1
-					end
-				end
-				-- spacer between diagns and hover info
-				-- only if hover info
-				if line_count ~= #markdown_lines then
-					table.insert(markdown_lines, line_count + 1, "---")
-				end
-			end
-
-			if vim.tbl_isempty(markdown_lines) then
-				return
-			end
-
-			vim.lsp.util.open_floating_preview(markdown_lines, "markdown", { border = "rounded" })
-		end
-	)
-end
 
 local expand_macro = function()
 	vim.lsp.buf_request_all(0, "rust-analyzer/expandMacro", vim.lsp.util.make_position_params(), function(result)
@@ -96,7 +37,14 @@ local expand_macro = function()
 	end)
 end
 
-local lsp_keymaps = function()
+local setup_lsp_bindings = function()
+	local function hover()
+		vim.lsp.buf.hover({
+			border = "rounded",
+			max_width = 80,
+			max_height = 30,
+		})
+	end
 	local function set(mode, binding, action, desc)
 		vim.keymap.set(mode, binding, action, { noremap = true, desc = desc })
 	end
@@ -118,107 +66,84 @@ end
 
 return {
 	{
-		"folke/lazydev.nvim",
-		ft = "lua",
-		opts = {
-			library = {
-				"lazy.nvim",
-			},
-		},
-	},
-	{
-		"dundalek/lazy-lsp.nvim",
-		dependencies = {
-			"neovim/nvim-lspconfig",
-		},
+		"neovim/nvim-lspconfig",
+		lazy = false,
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
-		opts = function()
-			lsp_keymaps()
+		init = function()
 			vim.lsp.codelens.enable(true)
-			vim.lsp.config("rust_analyzer", {
-				capabilities = capabilities,
-				commands = {
-					ExpandMacro = {
-						expand_macro,
+			setup_lsp_bindings()
+
+			---@param lsp_name string
+			---@param lsp_config? vim.lsp.Config
+			local function setup_lsp(
+				--[[required]]
+				lsp_name,
+				--[[optional]]
+				lsp_config
+			)
+				vim.lsp.config[lsp_name] = lsp_config or {}
+				vim.lsp.enable(lsp_name)
+			end
+			vim.lsp.enable({ "jsonls", "nixd" })
+			setup_lsp("yamlls", {
+				settings = { yaml = { format = { enable = false } } },
+			})
+			setup_lsp("lua_ls", {
+				settings = {
+					Lua = {
+						diagnostics = {
+							globals = { "vim" },
+						},
+						workspace = {
+							library = vim.api.nvim_get_runtime_file("lua", true),
+						},
+						telemetry = {
+							enable = false,
+						},
 					},
 				},
 			})
-			-- local configs = require("lspconfig.configs")
-			--
-			-- configs.agda_ls = {
-			-- 	default_config = {
-			-- 		cmd = { "als" },
-			-- 		filetypes = { "agda" },
-			-- 		root_dir = lspconfig.util.root_pattern("*.agda"),
-			-- 		single_file_support = true,
-			-- 	},
-			-- }
-			--
-			-- lspconfig.agda_ls.setup({})
-			return {
-				prefer_local = true,
-				-- https://github.com/dundalek/lazy-lsp.nvim/issues/63
-				use_vim_lsp_config = true,
-				excluded_servers = {
-					"denols",
-					"quick_lint_js",
-					"tailwindcss",
-					"efm",
-					"texlab",
-				},
-				preferred_servers = {
-					haskell = { "hls" },
-					c = { "clangd" },
-					typescript = { "ts_ls", "biome" },
-					tsx = { "ts_ls", "biome" },
-					typescriptreact = { "ts_ls", "biome" },
-					markdown = { "ltex" },
-					latex = { "ltex" },
-					python = { "pyright", "ruff_lsp" },
-				},
-				configs = {
-					rust_analyzer = {
-						settings = {
-							rust = {
-								procMacro = { enable = true },
+			setup_lsp("hls", {
+				settings = {
+					haskell = {
+						formattingProvider = "fourmolu",
+						plugin = {
+							hlint = {
+								globalOn = true,
+							},
+							splice = {
+								globalOn = true,
 							},
 						},
 					},
-					hls = {
-						settings = {
-							haskell = {
-								formattingProvider = "fourmolu",
-								plugin = {
-									hlint = {
-										globalOn = true,
-									},
-									splice = {
-										globalOn = true,
-									},
-								},
-							},
-						},
+				},
+			})
+			setup_lsp("rust_analyzer", {
+				settings = {
+					rust = {
+						procMacro = { enable = true },
 					},
-					ts_ls = {
-						single_file_support = false,
-					},
+				},
+			})
+
+			setup_lsp("ts_ls", {
+				single_file_support = false,
+			})
+			setup_lsp("ltex", {
+				flags = { debounce_text_changes = 300 },
+				settings = {
 					ltex = {
-						flags = { debounce_text_changes = 300 },
-						settings = {
-							ltex = {
-								language = "en-GB",
-								additionalRules = {
-									enablePickyRules = true,
-									motherTongue = "en-GB",
-								},
-								disabledRules = {
-									["en-GB"] = { "OXFORD_SPELLING_Z_NOT_S" },
-								},
-							},
+						language = "en-GB",
+						additionalRules = {
+							enablePickyRules = true,
+							motherTongue = "en-GB",
+						},
+						disabledRules = {
+							["en-GB"] = { "OXFORD_SPELLING_Z_NOT_S" },
 						},
 					},
 				},
-			}
+			})
 		end,
 	},
 	-- {

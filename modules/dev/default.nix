@@ -25,6 +25,8 @@
       docker-buildx
 
       yaml-language-server
+      vscode-json-languageserver
+      nixd
 
       # Java (for android dev)
       zulu17
