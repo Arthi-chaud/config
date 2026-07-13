@@ -84,7 +84,7 @@ return {
 				vim.lsp.config[lsp_name] = lsp_config or {}
 				vim.lsp.enable(lsp_name)
 			end
-			vim.lsp.enable({ "jsonls", "nixd" })
+			vim.lsp.enable({ "jsonls", "nixd", "pyright", "gopls" })
 			setup_lsp("yamlls", {
 				settings = { yaml = { format = { enable = false } } },
 			})
