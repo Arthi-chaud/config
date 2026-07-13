@@ -86,7 +86,6 @@ in
             dock = {
               orientation = "bottom";
               persistent-apps = [
-                { app = "/System/Applications/Launchpad.app"; }
                 { app = "${pkgs.firefox}/Applications/Firefox.app"; }
               ];
               show-recents = false;
