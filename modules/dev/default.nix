@@ -23,6 +23,7 @@
       docker
       docker-compose
       docker-buildx
+      docker-language-server
 
       yaml-language-server
       vscode-json-languageserver

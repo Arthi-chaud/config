@@ -1,5 +1,3 @@
--- Hover groups LSP Diagnostic and Hover Info
-
 local expand_macro = function()
 	vim.lsp.buf_request_all(0, "rust-analyzer/expandMacro", vim.lsp.util.make_position_params(), function(result)
 		-- Create a new tab
@@ -84,7 +82,13 @@ return {
 				vim.lsp.config[lsp_name] = lsp_config or {}
 				vim.lsp.enable(lsp_name)
 			end
-			vim.lsp.enable({ "jsonls", "nixd", "pyright", "gopls" })
+			vim.lsp.enable({
+				"jsonls",
+				"nixd",
+				"pyright",
+				"gopls",
+				"docker_language_server",
+			})
 			setup_lsp("yamlls", {
 				settings = { yaml = { format = { enable = false } } },
 			})
