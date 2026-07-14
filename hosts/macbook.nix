@@ -77,6 +77,7 @@ in
           };
         }
       )
+      (import ../modules/yabai { home = false; })
       (
         { pkgs, ... }:
         {
@@ -119,7 +120,6 @@ in
           ];
         };
       }
-      (import ../modules/yabai { home = false; })
       common.nixSettings
       {
         nix.enable = true;

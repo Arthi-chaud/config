@@ -2,7 +2,6 @@
 {
   impurity,
   pkgs,
-  config,
   ...
 }:
 if home then
@@ -17,10 +16,12 @@ if home then
     };
   }
 else
-  let
-    yabai =
-
-      (
+  {
+    services.yabai = {
+      enable = true;
+      enableScriptingAddition = true;
+      # NOTE: We use the precompile binary. The one built by nix does not work with SA
+      package = (
         pkgs.stdenv.mkDerivation rec {
           pname = "yabai";
           version = "7.1.25";
@@ -39,50 +40,5 @@ else
 
         }
       );
-  in
-  {
-
-    environment.systemPackages = [ yabai ];
-
-    # Rest is copied from nixpgs
-
-    launchd.daemons.yabai-sa = {
-      command = "${yabai}/bin/yabai --load-sa";
-      serviceConfig = {
-        RunAtLoad = true;
-        KeepAlive = {
-          SuccessfulExit = false;
-          Crashed = true;
-        };
-        Nice = -20;
-        StandardErrorPath = "/tmp/yabai-sa.err.log";
-      };
     };
-
-    launchd.user.agents.yabai = {
-      command = "${yabai}/bin/yabai";
-      serviceConfig = {
-        RunAtLoad = true;
-        KeepAlive = {
-          SuccessfulExit = false;
-          Crashed = true;
-        };
-        Nice = -20;
-        StandardOutPath = "/tmp/yabai.out.log";
-        StandardErrorPath = "/tmp/yabai.err.log";
-        ProcessType = "Interactive";
-        EnvironmentVariables = {
-          PATH = "${yabai}/bin:${config.environment.systemPath}";
-        };
-      };
-    };
-
-    environment.etc."sudoers.d/yabai".source = pkgs.runCommand "sudoers-yabai" { } ''
-      YABAI_BIN="${yabai}/bin/yabai"
-      SHASUM=$(sha256sum "$YABAI_BIN" | cut -d' ' -f1)
-      cat <<EOF >"$out"
-      %admin ALL=(root) NOPASSWD: sha256:$SHASUM $YABAI_BIN --load-sa
-      EOF
-    '';
-
   }
