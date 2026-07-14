@@ -17,6 +17,8 @@ in
 
   services.skhd = {
     enable = true;
+    outLogFile = /tmp/skhd.out.log;
+    errorLogFile = /tmp/skhd.err.log;
     config = ''
       alt - return : open -na $(which kitty) --args --single-instance --instance-group kk -d ~
 

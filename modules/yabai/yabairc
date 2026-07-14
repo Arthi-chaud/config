@@ -22,9 +22,7 @@ yabai -m rule --add app='qemu-system-aarch64' manage=off
 # Clean up empty spaces with no windows on them.
 yabai -m signal --add event=space_changed action="sh ~/.config/scripts/clear-empty-spaces.sh"
 # Refocus on window destruction
-for event in "window_destroyed" "application_terminated" "window_hidden" "window_minimized" "application_hidden";
+for event in "window_destroyed" "application_terminated" "window_minimized" "application_hidden";
 do
 yabai -m signal --add event="$event" action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse"
 done
-
-sleep 5 ; yabai -m config window_shadow off
