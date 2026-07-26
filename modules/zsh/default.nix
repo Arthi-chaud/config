@@ -95,6 +95,9 @@ in
       "gca" = "git commit --amend";
       "gcan" = "git commit --amend --no-edit";
 
+      "dc" = "docker compose";
+      "dcu" = "dc up";
+      "dcud" = "dcu -d";
       "dcd" = "docker compose -f docker-compose.dev.y*ml";
       "dcdu" = "dcd up";
       "dcde" = "dcd exec -it";
