@@ -129,7 +129,6 @@ in
         };
 
         nixpkgs.hostPlatform = system;
-        nixpkgs.config.allowUnfree = true;
 
         system.stateVersion = 6;
         system.primaryUser = username;
