@@ -42,7 +42,7 @@ in
       }
       ../modules/base
       ../modules/media
-      ../modules/dev
+      # ../modules/dev NOTE: Maybe not useful
       ../modules/git
       ../modules/zsh
       ../modules/nvim
