@@ -4,11 +4,14 @@
   lib,
   ...
 }:
+
 {
-  home.packages = with pkgs; [
-    ffmpeg
-    atomicparsley
-    yt-dlp
-  ];
-  # ++ lib.optionals (!isDarwin) [ makemkv ]; -- TODO: Failed to fetch
+  home.packages = (
+    with pkgs;
+    [
+      ffmpeg
+      atomicparsley
+      yt-dlp
+    ]
+  );
 }
