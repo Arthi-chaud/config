@@ -88,6 +88,7 @@ return {
 				"pyright",
 				"gopls",
 				"docker_language_server",
+				"prismals",
 			})
 			setup_lsp("yamlls", {
 				settings = { yaml = { format = { enable = false } } },
