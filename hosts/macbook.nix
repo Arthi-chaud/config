@@ -127,6 +127,7 @@ in
           automatic = true;
           options = "--delete-older-than 15d";
         };
+        nix.settings.trusted-users = [ username ];
 
         nixpkgs.hostPlatform = system;
 
