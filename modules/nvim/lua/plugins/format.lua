@@ -29,6 +29,7 @@ return {
 				javascriptreact = { "biome-check" },
 				tex = { "latexindent" },
 				nix = { "nixfmt" },
+				xml = { "xmlformat" }
 			},
 		},
 	},
