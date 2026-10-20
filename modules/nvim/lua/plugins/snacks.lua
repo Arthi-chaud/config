@@ -1,15 +1,19 @@
 ---@module 'snacks'
+---@module 'snoogle'
 
 return {
 
 	{
-		"snoogle",
+		"Arthi-chaud/snoogle.nvim",
 		dir = "/Users/arthur/Documents/Perso/snoogle",
-		opts = {},
+		--- @type snoogle.Config
+		opts = { use_stack = "in_project" },
 	},
 	{
 		"folke/snacks.nvim",
-		dependencies = {},
+		dependencies = {
+			"meanderingprogrammer/render-markdown.nvim",
+		},
 		priority = 1000,
 		lazy = false,
 		keys = {
@@ -48,7 +52,26 @@ return {
 			{
 				"<leader>hs",
 				function()
-					Snacks.picker.hoogle()
+					Snacks.picker.hoogle({
+						win = {
+							input = {
+								keys = {
+									["<c-b>"] = { "open_browser", mode = {
+										"i",
+										"n",
+									} },
+
+									["<enter>"] = {
+										"copy_to_clipboard",
+										mode = {
+											"i",
+											"n",
+										},
+									},
+								},
+							},
+						},
+					})
 				end,
 				desc = "Hoogle",
 			},
