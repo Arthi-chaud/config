@@ -52,7 +52,8 @@ return {
 			{
 				"<leader>hs",
 				function()
-					Snacks.picker.hoogle({
+					--- @type snacks.picker.Config
+					local config = {
 						win = {
 							input = {
 								keys = {
@@ -71,7 +72,8 @@ return {
 								},
 							},
 						},
-					})
+					}
+					Snacks.picker.hoogle(config)
 				end,
 				desc = "Hoogle",
 			},
@@ -150,6 +152,21 @@ return {
 					Snacks.terminal()
 				end,
 				desc = "Keymaps",
+			},
+
+			{
+				"<leader>p",
+				function()
+					Snacks.picker.resume()
+				end,
+				desc = "Reopen last Picker",
+			},
+			{
+				"<leader>P",
+				function()
+					Snacks.picker.pickers()
+				end,
+				desc = "List Pickers",
 			},
 		},
 		---@type snacks.Config
