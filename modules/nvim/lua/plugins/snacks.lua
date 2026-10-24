@@ -151,9 +151,15 @@ return {
 				function()
 					Snacks.terminal()
 				end,
-				desc = "Keymaps",
+				desc = "Open Terminal",
 			},
-
+			{
+				"<leader>r",
+				function()
+					Snacks.picker.registers()
+				end,
+				desc = "Reopen last Picker",
+			},
 			{
 				"<leader>p",
 				function()
