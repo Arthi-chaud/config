@@ -4,9 +4,8 @@
 return {
 
 	{
-		"Arthi-chaud/snoogle.nvim",
-		dir = "/Users/arthur/Documents/Perso/snoogle",
-		--- @type snoogle.Config
+		"Arthi-chaud/hoogle.nvim",
+		--- @type hoogle.Config
 		opts = { use_stack = "in_project" },
 	},
 	{
