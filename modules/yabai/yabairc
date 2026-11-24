@@ -18,6 +18,7 @@ sudo yabai --load-sa
 
 yabai -m rule --add app="^(K|k)itty$" opacity=0.97
 yabai -m rule --add app='qemu-system-aarch64' manage=off
+yabai -m rule --add app='Device Hub' manage=off
 
 # Clean up empty spaces with no windows on them.
 yabai -m signal --add event=space_changed action="sh ~/.config/scripts/clear-empty-spaces.sh"
